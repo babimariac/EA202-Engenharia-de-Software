@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniEvent - Gerenciamento de Eventos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>UniEvent</h1>
+            <nav>
+                <ul>
+                    <li><a href="#home" @click="showSection('home')">Home</a></li>
+                    <li><a href="#eventos" @click="showSection('eventos')">Eventos</a></li>
+                    <li><a href="#ingressos" @click="showSection('ingressos')">Ingressos</a></li>
+                    <li><a href="#relatorios" @click="showSection('relatorios')">Relatórios</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section id="home" v-show="currentSection === 'home'">
+                <h2>Bem-vindo à UniEvent</h2>
+                <p>Gerencie seus eventos de forma eficiente e profissional.</p>
+            </section>
+
+            <section id="eventos" v-show="currentSection === 'eventos'">
+                <h2>Gerenciar Eventos</h2>
+                <form @submit.prevent="criarEvento">
+                    <input v-model="novoEvento.nome" type="text" placeholder="Nome do Evento" required>
+                    <input v-model="novoEvento.data" type="date" required>
+                    <input v-model="novoEvento.local" type="text" placeholder="Local" required>
+                    <textarea v-model="novoEvento.descricao" placeholder="Descrição" required></textarea>
+                    <input v-model.number="novoEvento.valorIngresso" type="number" step="0.01" placeholder="Valor do Ingresso" required>
+                    <button type="submit">Criar Evento</button>
+                </form>
+                <div id="lista-eventos">
+                    <h3>Eventos Cadastrados</h3>
+                    <ul>
+                        <li v-for="evento in eventos" :key="evento.id">
+                            {{ evento.nome }} - {{ formatDate(evento.data) }} - R$ {{ evento.valorIngresso.toFixed(2) }}
+                            <button @click="editarEvento(evento)">Editar</button>
+                            <button @click="excluirEvento(evento)">Excluir</button>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="ingressos" v-show="currentSection === 'ingressos'">
+                <h2>Gerenciar Ingressos</h2>
+                <form @submit.prevent="gerarIngressos">
+                    <select v-model="novoIngresso.evento" required>
+                        <option value="">Selecione um evento</option>
+                        <option v-for="evento in eventos" :key="evento.id" :value="evento.id">{{ evento.nome }}</option>
+                    </select>
+                    <input v-model.number="novoIngresso.quantidade" type="number" placeholder="Quantidade" required>
+                    <input v-model="novoIngresso.tipo" type="text" placeholder="Tipo de Ingresso" required>
+                    <button type="submit">Gerar Ingressos</button>
+                </form>
+                <div id="lista-ingressos">
+                    <h3>Ingressos Disponíveis</h3>
+                    <ul>
+                        <li v-for="ingresso in ingressos" :key="ingresso.id">
+                            {{ ingresso.evento.nome }} - {{ ingresso.tipo }} - R$ {{ ingresso.evento.valorIngresso.toFixed(2) }}
+                            ({{ ingresso.quantidade }} disponíveis)
+                            <button @click="editarIngresso(ingresso)">Editar</button>
+                            <button @click="excluirIngresso(ingresso)">Excluir</button>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="relatorios" v-show="currentSection === 'relatorios'">
+                <h2>Relatórios</h2>
+                <select v-model="tipoRelatorio">
+                    <option value="financeiro">Relatório Financeiro</option>
+                    <option value="participantes">Relatório de Participantes</option>
+                </select>
+                <button @click="gerarRelatorio">Gerar Relatório</button>
+                <div id="resultado-relatorio">
+                    <pre>{{ relatorio }}</pre>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 UniEvent - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

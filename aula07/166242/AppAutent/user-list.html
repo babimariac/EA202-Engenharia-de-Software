@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Usuários</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 800px; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        .error { color: red; }
+        .success { color: green; }
+        input, button { margin: 5px; padding: 5px; }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Lista de Usuários Cadastrados</h1>
+        <div v-if="loggedUser">
+            <p>Usuário logado: {{ loggedUser.username }} ({{ loggedUser.role }})</p>
+            <div>
+                <input type="password" v-model="newPassword" placeholder="Nova senha">
+                <button @click="updatePassword">Atualizar Senha</button>
+            </div>
+        </div>
+        <table v-if="users.length > 0">
+            <thead>
+                <tr>
+                    <th>Nome de Usuário</th>
+                    <th>Papel</th>
+                    <th v-if="loggedUser && loggedUser.role === 'admin'">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="user in users" :key="user.username">
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.role }}</td>
+                    <td v-if="loggedUser && loggedUser.role === 'admin'">
+                        <button @click="removeUser(user.username)">Remover</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p v-else>Nenhum usuário cadastrado.</p>
+        
+        <p :class="messageClass">{{ message }}</p>
+        <button @click="goToHome">Voltar para Página Principal</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                users: [],
+                loggedUser: null,
+                message: '',
+                messageClass: '',
+                newPassword: ''
+            },
+            methods: {
+                async fetchUsers() {
+                    try {
+                        const response = await axios.get('/users');
+                        this.users = response.data.users;
+                    } catch (error) {
+                        this.message = 'Erro ao carregar usuários: ' + (error.response ? error.response.data : error.message);
+                        this.messageClass = 'error';
+                    }
+                },
+                async updatePassword() {
+                    if (!this.newPassword) {
+                        this.message = 'Por favor, insira uma nova senha.';
+                        this.messageClass = 'error';
+                        return;
+                    }
+                    try {
+                        const response = await axios.put(`/users/${this.loggedUser.username}`, {
+                            password: this.newPassword
+                        });
+                        this.message = response.data.resultado;
+                        this.messageClass = 'success';
+                        this.newPassword = '';
+                    } catch (error) {
+                        this.message = 'Erro ao atualizar senha: ' + (error.response ? error.response.data : error.message);
+                        this.messageClass = 'error';
+                    }
+                },
+                async removeUser(username) {
+                    if (confirm(`Tem certeza que deseja remover o usuário ${username}?`)) {
+                        try {
+                            const response = await axios.delete(`/users/${username}`);
+                            this.message = response.data.resultado;
+                            this.messageClass = 'success';
+                            await this.fetchUsers();
+                        } catch (error) {
+                            this.message = 'Erro ao remover usuário: ' + (error.response ? error.response.data : error.message);
+                            this.messageClass = 'error';
+                        }
+                    }
+                },
+                goToHome() {
+                    window.location.href = '/';
+                }
+            },
+            mounted() {
+                axios.get('/check-auth')
+                    .then(response => {
+                        if (response.data.user) {
+                            this.loggedUser = response.data.user;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao verificar autenticação:', error);
+                    });
+                this.fetchUsers();
+            }
+        });
+    </script>
+</body>
+</html>

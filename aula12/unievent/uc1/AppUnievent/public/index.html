@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniEvent - Gerenciamento de Eventos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>UniEvent</h1>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#eventos" id="link-eventos">Eventos</a></li>
+                    <li><a href="#ingressos">Ingressos</a></li>
+                    <li><a href="#relatorios">Relatórios</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section id="home">
+                <h2>Bem-vindo à UniEvent</h2>
+                <p>Gerencie seus eventos de forma eficiente e profissional.</p>
+            </section>
+
+            <section id="eventos" style="display: none;">
+                <h2>Gerenciar Eventos</h2>
+                <form id="evento-form">
+                    <input type="text" placeholder="Nome do Evento" required>
+                    <input type="date" placeholder="Data" required>
+                    <input type="text" placeholder="Local" required>
+                    <textarea placeholder="Descrição" required></textarea>
+                    <button type="submit">Criar Evento</button>
+                </form>
+                <div id="lista-eventos"></div>
+            </section>
+
+            <section id="ingressos" style="display: none;">
+                <h2>Gerenciar Ingressos</h2>
+                <form id="ingresso-form">
+                    <select id="evento-select" required>
+                        <option value="">Selecione um evento</option>
+                    </select>
+                    <input type="number" placeholder="Quantidade" required>
+                    <input type="number" step="0.01" placeholder="Preço" required>
+                    <button type="submit">Gerar Ingressos</button>
+                </form>
+                <div id="lista-ingressos"></div>
+            </section>
+
+            <section id="relatorios" style="display: none;">
+                <h2>Relatórios</h2>
+                <select id="relatorio-select">
+                    <option value="financeiro">Relatório Financeiro</option>
+                    <option value="participantes">Relatório de Participantes</option>
+                </select>
+                <button id="gerar-relatorio">Gerar Relatório</button>
+                <div id="resultado-relatorio"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 UniEvent - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gerenciamento de Alunos</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <h1>Sistema de Gerenciamento de Alunos</h1>
+        
+        <div class="form-section">
+            <h2>Inserção e Atualização de Alunos</h2>
+            <input type="text" v-model="newStudent.ra" placeholder="RA" id="ra-insert-input">
+            <input type="text" v-model="newStudent.nome" placeholder="Nome" id="name-input">
+            <input type="text" v-model="newStudent.curso" placeholder="Curso" id="course-input">
+            <button @click="insertStudent" id="insert-btm">Inserir</button>
+            <button @click="updateStudent" id="update-btm">Atualizar</button>
+        </div>
+
+        <div class="form-section">
+            <h2>Consulta e Deleção de Alunos</h2>
+            <input type="text" v-model="searchRA" placeholder="RA" id="ra-consult-input">
+            <button @click="getStudentByRA" id="get-btm">Consultar</button>
+            <button @click="deleteStudent" id="delete-btm">Deletar</button>
+        </div>
+
+        <div class="result-section">
+            <h2>Resultado</h2>
+            <p id="result">{{ message }}</p>
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th>RA</th>
+                        <th>Nome</th>
+                        <th>Curso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(student, index) in students" :key="index">
+                        <td>{{ student.ra }}</td>
+                        <td>{{ student.nome }}</td>
+                        <td>{{ student.curso }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                newStudent: { ra: '', nome: '', curso: '' },
+                searchRA: '',
+                students: [{ ra: '', nome: '', curso: '' }],
+                message: ''
+            },
+            methods: {
+                async getStudents() {
+                    try {
+                        const response = await axios.get('/alunos');
+                        if (response.data.alunos && response.data.alunos.length > 0) {
+                            this.students = [{ ra: '', nome: '', curso: '' }, ...response.data.alunos];
+                            this.message = '';
+                        } else {
+                            this.students = [{ ra: '', nome: '', curso: '' }];
+                            this.message = 'Nenhum aluno encontrado';
+                        }
+                    } catch (error) {
+                        this.students = [{ ra: '', nome: '', curso: '' }];
+                        this.message = 'falha de acesso ao BD';
+                    }
+                },
+                async getStudentByRA() {
+                    if (!this.searchRA) {
+                        await this.getStudents();
+                        return;
+                    }
+                    try {
+                        const response = await axios.get(`/alunos/${this.searchRA}`);
+                        if (response.data.alunos) {
+                            const foundStudent = Array.isArray(response.data.alunos) ? response.data.alunos[0] : response.data.alunos;
+                            this.students = [{ ra: '', nome: '', curso: '' }, foundStudent];
+                            this.message = '';
+                        } else {
+                            this.students = [{ ra: '', nome: '', curso: '' }];
+                            this.message = 'aluno inexistente';
+                        }
+                    } catch (error) {
+                        this.students = [{ ra: '', nome: '', curso: '' }];
+                        this.message = 'aluno inexistente';
+                    }
+                },
+                async insertStudent() {
+                    try {
+                        const response = await axios.post('/alunos', this.newStudent);
+                        if (response.data.resultado === 'aluno inserido') {
+                            await this.getStudents();
+                            this.newStudent = { ra: '', nome: '', curso: '' };
+                            this.message = 'aluno inserido';
+                        } else {
+                            this.message = 'aluno ja existente';
+                        }
+                    } catch (error) {
+                        this.message = 'aluno ja existente';
+                    }
+                },
+                async updateStudent() {
+                    try {
+                        const response = await axios.put(`/alunos/${this.newStudent.ra}`, {
+                            nome: this.newStudent.nome,
+                            curso: this.newStudent.curso
+                        });
+                        if (response.data.resultado === 'aluno atualizado') {
+                            await this.getStudents();
+                            this.newStudent = { ra: '', nome: '', curso: '' };
+                            this.message = 'aluno atualizado';
+                        } else {
+                            this.message = 'aluno inexistente';
+                        }
+                    } catch (error) {
+                        this.message = error.response && error.response.status === 404 ? 'aluno inexistente' : 'falha de acesso ao BD';
+                    }
+                },
+                async deleteStudent() {
+                    try {
+                        const response = await axios.delete(`/alunos/${this.searchRA}`);
+                        if (response.data.resultado === 'aluno removido') {
+                            this.message = 'aluno removido';
+                            this.searchRA = '';
+                            await this.getStudents();
+                        } else {
+                            this.message = 'aluno inexistente';
+                        }
+                    } catch (error) {
+                        this.message = error.response && error.response.status === 404 ? 'aluno inexistente' : 'falha de acesso ao BD';
+                    }
+                }
+            },
+            mounted() {
+                this.getStudents();
+            }
+        });
+    </script>
+</body>
+</html>

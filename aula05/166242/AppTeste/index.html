@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<body>
+
+<h2>Manipulador de Recursos</h2>
+
+<br>
+
+<div id="app">
+  <form @submit.prevent="clear">
+    URL do Recurso: <input id="path" type="text" v-model="recurso" size=50><br><br>
+    Repr. do Recurso: <input id="json-content" type="text" v-model="repr" size=100><br><br>
+    Metodo HTTP: &nbsp; 
+    <button id="get-btm" v-on:click="doGet()">GET</button> &nbsp;
+    <button id="post-btm" v-on:click="doPost()">POST</button> &nbsp;
+    <button id="put-btm" v-on:click="doPut()">PUT</button> &nbsp;
+    <button id="delete-btm" v-on:click="doDelete()">DELETE</button> &nbsp 
+    <button v-on:click="doClear()">CLEAR</button> <br><br><br>
+  </form>
+    <b>Retorno:</b><br><br>
+    Codigo de Retorno HTTP: {{ codigo }}  
+    <br><br>
+    <p id="result">Payload:  {{ payload }}</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+
+async function procGet() {
+       var url = app.recurso;
+       var data = app.repr;
+       var request = axios({"method": "get","url": url});
+       try {
+         response = await request
+       } catch (error) {
+         response = {"data": { "resultado": " URL inválida" }, "status": 404, "statusText": "Error"}
+       } 
+       app.payload = response.data
+       app.codigo = response.status + " "+ response.statusText
+    }
+
+    async function procPost () {
+       var url = app.recurso;
+       var data = app.repr;
+       var request = axios({
+                   "method": "post",
+                   "url": url,
+                   "headers": { "Content-Type": "application/json" },
+                   "data": data});
+        try {
+         response = await request
+       } catch (error) {
+         response = response = {"data": { "resultado": " URL inválida" }, "status": 404, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText        
+    }
+
+    async function procPut() {
+       var url = app.recurso;
+       var data = app.repr;
+       var request = axios({
+                   "method": "put",
+                   "url": url,
+		   "headers": { "Content-Type": "application/json" },		   
+                   "data": data});
+        try {
+        response = await request
+       } catch (error) {
+         response = {"data": { "resultado": " URL inválida" }, "status": 404, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText
+    }
+
+    async function procDelete() {
+       var url = app.recurso;
+       var request = axios({
+                   "method": "delete",
+                   "url": url});
+        try {
+        response = await request
+       } catch (error) {
+         response = {"data": { "resultado": " URL inválida" }, "status": 404, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText            
+     }
+
+     async function procClear() {
+      app.codigo = "";
+      app.payload = "";
+      }
+  
+  var configdata = {
+    el: '#app',
+    data: { 
+         payload: '',
+         codigo: '',
+         recurso: '/alunos',
+         repr: '{"ra": "123456", "nome": "Albert Einstein", "curso": "Fisica"}'
+    },
+    methods: {
+        doGet: procGet,
+        doPost: procPost,
+        doPut: procPut,
+        doDelete: procDelete,
+        doClear: procClear
+    }
+   }
+  
+  var app = new Vue(configdata)
+  </script> 
+
+
+</body>
+</html>
+

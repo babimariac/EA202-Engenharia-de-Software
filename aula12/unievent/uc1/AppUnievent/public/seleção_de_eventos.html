@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos Disponíveis</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .container {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 1rem;
+        }
+        .event-section {
+            display: flex;
+            justify-content: space-between;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+        .event-section div {
+            width: 45%;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .available-events a {
+            color: blue;
+            text-decoration: none;
+        }
+        .unavailable-events a {
+            color: red;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>UniEvent</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="seleção_de_eventos.html">Eventos</a></li>
+                <li><a href="#ingressos">Ingressos</a></li>
+                <li><a href="#relatorios">Relatórios</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Eventos</h1>
+            <div class="event-section">
+                <div class="available-events">
+                    <h2>Disponíveis</h2>
+                    <ul>
+                        <li><a href="participar_de_evento_1.html" style="color: blue;">Evento 1</a></li>
+                        <li><a href="participar_de_evento_2.html" style="color: blue;">Evento 2</a></li>
+                        <li><a href="participar_de_evento_3.html" style="color: blue;">Evento 3</a></li>
+                    </ul>
+                </div>
+                <div class="unavailable-events">
+                    <h2>Indisponíveis</h2>
+                    <ul>
+                        <li><a href="#" style="color: red;">Evento 1</a></li>
+                        <li><a href="#" style="color: red;">Evento 2</a></li>
+                        <li><a href="#" style="color: red;">Evento 3</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 UniEvent - Todos os direitos reservados</p>
+    </footer>
+</body>
+</html>

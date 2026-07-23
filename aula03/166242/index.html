@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entregável 3</title>
+    <link rel="stylesheet" href="CSS/main.css">
+</head>
+
+<body>
+    <header id="div1">
+        <div class="header-logo">
+            <a href="https://www.fee.unicamp.br"target="_ blanck" id="logo-feec">
+                <img src="IMG/logo-feec.png" alt="Logo FEEC" class="header-img">
+            </a>
+        </div>
+        <h1>Engenharia de Software<br>EA202</h1>
+        <div class="header-logo">
+            <a href="https://gitlab.unicamp.br/ea202-2024"target="_ blanck" id="logo-git">
+                <img src="IMG/logo-gitlab-unicamp.png" alt="GitLab e UNICAMP" class="header-img">
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="main-container">
+            <aside id="menu">
+                <nav>
+                    <ul>
+                        <li><strong><u>Menu</u></strong></li>
+                        <li><a href="#" id="link-home" target="_blank">HOME</a></li>
+                        <li><a href="https://moodle.ggte.unicamp.br/"target="_ blanck" id="link-moodle" target="_blank">Moodle</a></li>
+                        <li><strong><u>Tutoriais</u></strong></li>
+                        <li><a href="https://www.w3schools.com/html/default.asp"target="_ blanck" id="link-html" target="_blank">HTML</a></li>
+                        <li><a href="https://www.w3schools.com/css/default.asp"target="_ blanck" id="link-css" target="_blank">CSS</a></li>
+                        <li><a href="https://www.w3schools.com/js/default.asp"target="_ blanck" id="link-js" target="_blank">JS</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <div class="content">
+                <div id="date"></div>
+                <div class="form-container">
+                    <h2>Entregável 3:</h2>
+                    <h3>Formulário teste</h3>
+                    <form id="formulario">
+                        <div class="form-left">
+                            <div>
+                                <label for="name">Nome*:</label>
+                                <input type="text" id="name" required>
+                            </div>
+                            <div>
+                                <label for="birth-date">Data de Nascimento*:</label>
+                                <input type="text" id="birth-date" required>
+                            </div>
+                            <div>
+                                <label for="university">Universidade*:</label>
+                                <select id="university" required>
+                                    <option value="">Selecione</option>
+                                    <option>Unicamp</option>
+                                    <option>USP</option>
+                                    <option>UFMG</option>
+                                    <option>Unesp</option>
+                                    <option>UFRJ</option>
+                                    <option>UnB</option>
+                                    <option>FGV</option>
+                                    <option>Insper</option>
+                                    <option>PUC</option>
+                                    <option>UFRGS</option>
+                                    <option>Outra</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="course">Curso*:</label>
+                                <select id="course" required>
+                                    <option value="">Selecione</option>
+                                    <option>Engenharia Elétrica</option>
+                                    <option>Engenharia de Computação</option>
+                                    <option>Ciência da Computação</option>
+                                    <option>Engenharia Mecânica</option>
+                                    <option>Engenharia Química</option>
+                                    <option>Engenharia Civil</option>
+                                    <option>Matemática</option>
+                                    <option>Física</option>
+                                    <option>Química</option>
+                                    <option>Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-right">
+                            <div>
+                                <label for="ra">RA*:</label>
+                                <input type="text" id="ra" required>
+                            </div>
+                            <div>
+                                <label for="place-birth">Naturalidade*:</label>
+                                <input type="text" id="place-birth" required>
+                            </div>
+                            <div style="height: 20px;"></div>
+                            <div>
+                                <label for="semesters">Semestre*:</label>
+                                <select id="semesters" required>
+                                    <option value="">Selecione</option>
+                                    <option>1º</option>
+                                    <option>2º</option>
+                                    <option>3º</option>
+                                    <option>4º</option>
+                                    <option>5º</option>
+                                    <option>6º</option>
+                                    <option>7º</option>
+                                    <option>8º</option>
+                                    <option>9º</option>
+                                    <option>10º</option>
+                                    <option>11º</option>
+                                    <option>12º</option>
+                                    <option>13º</option>
+                                    <option>14º</option>
+                                    <option>15º</option>
+                                    <option>16º</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-submit">
+                            <button type="button" id="submit-button">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <aside class="right-margin"></aside>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>Faculdade de Engenharia Elétrica e de Computação<br> UNICAMP - Universidade Estadual de Campinas<br> Av. Albert Einstein 400.<br> 13.083-852 Campinas - SP, Brazil</p>
+            <img src="IMG/logo-unicamp.png" alt="Logo UNICAMP" class="footer-img">
+        </div>
+    </footer>
+
+    <script src="JS/main.js"></script>
+</body>
+
+</html>

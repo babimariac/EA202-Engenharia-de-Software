@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastro de Usuários</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 300px; margin: 0 auto; }
+        input, select { width: 100%; padding: 5px; margin-bottom: 10px; }
+        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Cadastro de Usuários</h1>
+        <form @submit.prevent="registerUser">
+            <input type="text" v-model="username" placeholder="Nome de usuário" required>
+            <input type="password" v-model="password" placeholder="Senha" required>
+            <select v-model="role" required>
+                <option value="user">Usuário</option>
+                <option value="admin">Administrador</option>
+            </select>
+            <button type="submit">Cadastrar</button>
+        </form>
+        <p :class="messageClass">{{ message }}</p>
+        <button @click="goToHome">Voltar para Página Principal</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                username: '',
+                password: '',
+                role: 'user',
+                message: '',
+                messageClass: ''
+            },
+            methods: {
+                async registerUser() {
+                    try {
+                        const response = await axios.post('/users', {
+                            username: this.username,
+                            password: this.password,
+                            role: this.role
+                        });
+                        this.message = response.data.resultado;
+                        this.messageClass = 'success';
+                        this.username = '';
+                        this.password = '';
+                        this.role = 'user';
+                    } catch (error) {
+                        this.message = 'Erro ao cadastrar usuário';
+                        this.messageClass = 'error';
+                    }
+                },
+                goToHome() {
+                    window.location.href = '/';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
